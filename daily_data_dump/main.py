@@ -1,3 +1,4 @@
+from omspy_brokers.finvasia import Finvasia
 import time
 from datetime import datetime
 import pandas as pd  # pip install pandas
@@ -14,12 +15,14 @@ def make_api_call(row, custom_config):
     try:
         start_time_from_config = start_time_from_config + " 00:00:00"
         time_obj = time.strptime(start_time_from_config, "%d-%m-%Y %H:%M:%S")
-    except:
+    except Exception as e:
+        print(e)
         today = datetime.now()
         start_time_from_config = today.strftime("%d-%m-%Y") + " 00:00:00"
         time_obj = time.strptime(start_time_from_config, "%d-%m-%Y %H:%M:%S")
     finally:
         start_time = time.mktime(time_obj)
+
     one_day_seconds = 86400.0
     end_time = str(start_time + one_day_seconds)
     start_time = str(start_time)
@@ -37,8 +40,6 @@ def make_api_call(row, custom_config):
 
 
 if __name__ == "__main__":
-    from omspy_brokers.finvasia import Finvasia
-
     BROKER = Finvasia
     dir_path = "../../"
     input_path = dir_path + "input/"
@@ -51,6 +52,11 @@ if __name__ == "__main__":
         custom_config = config["custom_config"]
 
     if not os.path.exists(input_path):
+        print(f"create the input folder at {input_path}")
+        sys.exit(-1)
+
+    if not os.path.exists(input_path):
+        print(f"create the output folder at {output_path}")
         sys.exit(-1)
 
     lst_csv = Fileutils().get_files_with_extn("csv", input_path)
@@ -61,5 +67,7 @@ if __name__ == "__main__":
         )
         final_df = pd.concat(input_df["historical_data"].tolist(), ignore_index=True)
         chosen_date = final_df["time"].to_list()[0].split()[0]
-        final_df.to_feather(f"{output_path}{chosen_date}_{csv_file.replace('.csv', '.feather')}")
+        final_df.to_feather(
+            f"{output_path}{chosen_date}_{csv_file.replace('.csv', '.feather')}"
+        )
 
