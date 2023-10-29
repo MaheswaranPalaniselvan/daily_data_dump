@@ -61,5 +61,5 @@ if __name__ == "__main__":
         )
         final_df = pd.concat(input_df["historical_data"].tolist(), ignore_index=True)
         chosen_date = final_df["time"].to_list()[0].split()[0]
-        final_df.to_csv(f"{output_path}{chosen_date}_{csv_file}")
+        final_df.to_feather(f"{output_path}{chosen_date}_{csv_file.replace('.csv', '.feather')}")
 
