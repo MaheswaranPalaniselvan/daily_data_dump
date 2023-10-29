@@ -55,7 +55,6 @@ if __name__ == "__main__":
 
     lst_csv = Fileutils().get_files_with_extn("csv", input_path)
     for csv_file in lst_csv:
-        print(csv_file)
         input_df = pd.read_csv(input_path + csv_file)
         input_df["historical_data"] = input_df.apply(
             make_api_call, custom_config=custom_config, axis=1
