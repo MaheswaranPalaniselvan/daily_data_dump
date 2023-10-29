@@ -1,0 +1,9 @@
+finvasia:
+  app_key : "3xxxxx1234xxx2345xxx1234"
+  user_id : "U1234"
+  password : "secret@123"
+  imei : "abc1234"
+  vendor_code :   "U1234_U"
+  pin : "6Z3455X7DD27X2523644x42BCrZ3r74O"
+custom_config:
+  start_time: "27-10-2023"
