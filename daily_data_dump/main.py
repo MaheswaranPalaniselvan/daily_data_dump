@@ -48,17 +48,19 @@ if __name__ == "__main__":
         broker = BROKER(**config["finvasia"])
         if broker.authenticate():
             print("success")
+        custom_config = config["custom_config"]
 
     if not os.path.exists(input_path):
         sys.exit(-1)
 
-    lst_csv = Fileutils().get_files_with_extn("csv", input_path):
-    for csvfile in lst_csv:
-        input_df = pd.read_csv(csvfile)
+    lst_csv = Fileutils().get_files_with_extn("csv", input_path)
+    for csv_file in lst_csv:
+        print(csv_file)
+        input_df = pd.read_csv(input_path + csv_file)
         input_df["historical_data"] = input_df.apply(
             make_api_call, custom_config=custom_config, axis=1
         )
         final_df = pd.concat(input_df["historical_data"].tolist(), ignore_index=True)
         chosen_date = final_df["time"].to_list()[0].split()[0]
-        final_df.to_csv(f"output_path/{chosen_date}_{input_file_name}")
+        final_df.to_csv(f"{output_path}{chosen_date}_{csv_file}")
 
